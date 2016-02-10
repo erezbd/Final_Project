@@ -50,12 +50,13 @@ public class parsing
 	
 	public void pars (String s , writeToFile write ) // a builder constructor that copy the message and do all the work
 	{
+		
 		System.out.println(s);
 		this.par = s; //
-	
-
 		
-		par = par.replace(".", "");  				// delete all the dotes in the message 
+		
+	//	par = par.replace(".", "");  				// delete all the dotes in the message 
+		par.trim();
 		par = par.replace("(", "");
 		par = par.replace(")", "");
 		
@@ -110,7 +111,7 @@ public class parsing
 				//	System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
 					f=false; // return the flag to false
-					rejectRes = par.substring(par.indexOf(res1), par.indexOf(res1 , 10)); // cut the message way the student can't sign to the korss.
+					rejectRes = par.substring(par.indexOf(res1), par.indexOf("...")); // cut the message way the student can't sign to the korss.
 					
 					System.out.println("this is the rej : " +rejectRes);
 					par = par.replaceAll(rejectRes, "");  // delete the reject mess from the string
@@ -121,7 +122,7 @@ public class parsing
 				}
 				else  //  it's סיבת דחיה  do the same
 				{
-					rejectRes = par.substring(par.indexOf(res2), par.indexOf(res2 , 10));
+					rejectRes = par.substring(par.indexOf(res2), par.indexOf("..."));
 					par = par.replaceAll(rejectRes, "");
 					System.out.println(rejectRes);
 					System.out.println(par);
@@ -163,6 +164,14 @@ public class parsing
 				
 				par = "";
 				
+				
+				korssInfo = korssInfo.replace(".", "");
+				wantedKorss = wantedKorss.replace(".", "");
+				studentMessage = studentMessage.replace(".", "");
+				for (int i = 0; i < res.length; i++) {
+					if (res[i]!=null)
+						res[i] = res[i].replace(".", "");
+				}
 				write.writeParsingFile(korssInfo, wantedKorss, korssCode, studentMessage, res, par, rowPars); // send all the info to write class 
 				rowPars++;
 				
@@ -178,7 +187,7 @@ public class parsing
 			//reset();
 		}
 			
-	//	reset();
+		reset();
 	}
 
 	
@@ -190,8 +199,8 @@ public class parsing
 		wantedKorss = "";
 		rejectRes = "";
 		studentMessage = "";
-		for (int i = 0; i < arr.length; i++) {
-			if (res[i]==null)
+		for (int i = 0; i < res.length; i++) {
+			if (res[i]!=null)
 				res[i] = "";
 		}
 	}

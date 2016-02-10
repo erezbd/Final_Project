@@ -18,6 +18,7 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.xssf.streaming.SheetDataWriter;
 import org.apache.poi.xssf.usermodel.XSSFFont;
@@ -28,8 +29,11 @@ public class writeToFile
 {
 //	int nextRowToWrite = 3;
 	Cell date , time, num, id ;
-
 	
+	Workbook work = new XSSFWorkbook();
+	Sheet sheet1 = work.createSheet();
+  //  sheet1 = work.getSheetAt(0);
+
 	public void writeCell(Cell date , Cell time , Cell num , Cell id)
 	{
 		this.date = date;
@@ -48,8 +52,9 @@ public class writeToFile
 		
 			try
 			{
-			Workbook wb = new XSSFWorkbook();
-			Sheet sheet1 = wb.createSheet("הודעות דחייה");
+		//	Workbook wb = new XSSFWorkbook();
+		//	Sheet sheet1 = wb.createSheet("הודעות דחייה");
+			
 		//	CellStyle style = wb.createCellStyle();
 
 			 
@@ -125,7 +130,7 @@ public class writeToFile
 	        
 	        
 	        for (int i = 0; i < 12; i++) {
-				CellStyle style = wb.createCellStyle();
+				CellStyle style = work.createCellStyle();
 //				 style.setBorderBottom(CellStyle.BORDER_THIN);
 //				    style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
 //				    style.setBorderLeft(CellStyle.BORDER_THIN);
@@ -135,7 +140,7 @@ public class writeToFile
 //				    style.setBorderTop(CellStyle.BORDER_MEDIUM_DASHED);
 //				    style.setTopBorderColor(IndexedColors.BLACK.getIndex());
 //				    cell.setCellStyle(style);
-				Font font = wb.createFont();
+				Font font = work.createFont();
 				font.setBold(true);
 				font.setFontName(XSSFFont.DEFAULT_FONT_NAME);
 				font.setFontHeightInPoints((short) 11);
@@ -150,17 +155,18 @@ public class writeToFile
 
 			}
 	        
-	        FileOutputStream fileOut = new FileOutputStream("C:\\Users\\erez\\Desktop\\בשם השם נעשה ונצליח!!\\writeTest\\JavaBooks.xlsx");
-	        wb.write(fileOut);
-	        wb.close();
-		    fileOut.close();
-			System.out.println("Success1"); 
+	       // FileOutputStream fileOut = new FileOutputStream("C:\\Users\\erez\\Desktop\\בשם השם נעשה ונצליח!!\\writeTest\\JavaBooks.xlsx");
+	        
+	      //  wb.write(fileOut);
+//	        wb.close();
+//		    fileOut.close();
+			//System.out.println("Success1"); 
 	
 			}
 			
 			catch (Exception e)
 			{
-				System.out.println(e.getMessage());
+				System.out.println(e.getMessage() + "write class error");
 			}
 		
 	}
@@ -170,63 +176,102 @@ public class writeToFile
 	public void writeParsingFile(String korssInfo ,String wantedKorss,String korssCode, String studentMessage,String[] res , String unParsingMessage ,int rowPars)
 	{
 		
-		System.out.println("writeParsingFile "); 
+		//System.out.println("writeParsingFile "); 
 
 		try
 		{
 			//File scr = new File("C:\\Users\\erez\\Desktop\\בשם השם נעשה ונצליח!!\\writeTest\\JavaBooks.xlsx");
-			InputStream inp = new FileInputStream("C:\\Users\\erez\\Desktop\\בשם השם נעשה ונצליח!!\\writeTest\\JavaBooks.xlsx");
 			//FileInputStream fis = new FileInputStream(scr);
-		
-			
-			Workbook wb = new XSSFWorkbook(inp);
-		
+		//	InputStream inp = new FileInputStream("C:\\Users\\erez\\Desktop\\בשם השם נעשה ונצליח!!\\writeTest\\JavaBooks.xlsx");
+
 		//Sheet sheet1 = wb.createSheet("הודעות דחייה");
 	    
-	        Sheet sheet1 = wb.getSheetAt(0);
 			Row row = sheet1 .createRow(rowPars);			
 			row.createCell(0).setCellValue(id.getNumericCellValue());
+			sheet1.autoSizeColumn(0);
+//			 style.setBorderBottom(CellStyle.BORDER_THIN);
+//		    style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+//		    style.setBorderLeft(CellStyle.BORDER_THIN);
+//		    style.setLeftBorderColor(IndexedColors.GREEN.getIndex());
+//		    style.setBorderRight(CellStyle.BORDER_THIN);
+//		    style.setRightBorderColor(IndexedColors.BLUE.getIndex());
+//		    style.setBorderTop(CellStyle.BORDER_MEDIUM_DASHED);
+//		    style.setTopBorderColor(IndexedColors.BLACK.getIndex());
+//		    cell.setCellStyle(style);
 			row.createCell(1).setCellValue(num.getNumericCellValue());
+			sheet1.autoSizeColumn(1);
+
 			row.createCell(2).setCellValue(date.toString());
+			sheet1.autoSizeColumn(2);
+
 			row.createCell(3).setCellValue(time.toString());
+			sheet1.autoSizeColumn(3);
+
 			row.createCell(4).setCellValue(wantedKorss);
+			sheet1.autoSizeColumn(5);
+
 			row.createCell(5).setCellValue(korssCode);
+			sheet1.autoSizeColumn(6);
+
 
 	        row.createCell(6).setCellValue(korssInfo);
+			sheet1.autoSizeColumn(7);
+
 	       
         for (int i = 0; i < res.length; i++) {
             row.createCell(7+i).setCellValue(res[i]);
+			//sheet1.autoSizeColumn(7+i);
+
 		}
         
 	    
 	        row.createCell(10).setCellValue(studentMessage);
+		//	sheet1.autoSizeColumn(10);
+
 	        row.createCell(11).setCellValue(unParsingMessage);
+		//	sheet1.autoSizeColumn(11);
+
 	        
-	
 	        
-	        
-	        FileOutputStream fileOut = new FileOutputStream("C:\\Users\\erez\\Desktop\\בשם השם נעשה ונצליח!!\\writeTest\\JavaBooks.xlsx");
-	        wb.write(fileOut);
-	      
-		    fileOut.close();
-		    wb.close();
-			System.out.println("Success2"); 
+
+//	        FileOutputStream fileOut = new FileOutputStream("C:\\Users\\erez\\Desktop\\בשם השם נעשה ונצליח!!\\writeTest\\JavaBooks.xlsx");
+//
+//	        wb.write(fileOut);
+//	      
+//		    fileOut.close();
+//		    wb.close();
+		//	System.out.println("Success2"); 
 
 		}
 		
 		catch (Exception e)
 		{
-			System.out.println(e.getMessage()+"error is here");
+			System.out.println(e.getMessage()+"x");
 		}
 		
-		 //
-		 
-	//	 nextRowToWrite++;
-		
+
 	}
 	
 
-	
+	public void writeObj()
+	{
+		try 
+		{
+			
+		//	Workbook wb = WorkbookFactory.create(new File("C:\\Users\\erez\\Desktop\\בשם השם נעשה ונצליח!!\\writeTest\\JavaBooks.xlsx"));
+	        FileOutputStream fileOut = new FileOutputStream("C:\\Users\\erez\\Desktop\\בשם השם נעשה ונצליח!!\\writeTest\\Books.xlsx");
+
+	        work.write(fileOut);
+	      
+		    fileOut.close();
+		    work.close();
+		} 
+		catch (Exception e) 
+		{
+			System.out.println(e.getMessage()+"x");
+
+		}
+	}
 	
 	
 
