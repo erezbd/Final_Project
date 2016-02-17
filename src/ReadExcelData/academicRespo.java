@@ -1,8 +1,8 @@
 package ReadExcelData;
 
-public class academicRespo 
+public class academicRespo implements Comparable<academicRespo>
 {
-	private String headOfDep;
+	private String headOfDep = "";
 	private int courseCode;
 	
 	public String toString() {
@@ -22,5 +22,9 @@ public class academicRespo
 		this.courseCode = courseCode;
 	}
 	
-	
+	 public int compareTo(academicRespo other)	
+	 {
+		 int compare = ((academicRespo)other).getCourseCode();
+		 return this.courseCode - compare;
+	 }
 }

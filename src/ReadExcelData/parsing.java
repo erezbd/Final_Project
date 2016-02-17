@@ -44,7 +44,6 @@ public class parsing
 	
 	
 
-	//writeToFile write = new writeToFile();
 
 	
 	
@@ -52,10 +51,9 @@ public class parsing
 	{
 		
 		System.out.println(s);
-		this.par = s; //
+		this.par = s; 
 		
 		
-	//	par = par.replace(".", "");  				// delete all the dotes in the message 
 		par.trim();
 		par = par.replace("(", "");
 		par = par.replace(")", "");
@@ -108,7 +106,6 @@ public class parsing
 				
 				if(f==true)  // check if there was סיבות דחיה
 				{
-				//	System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
 					f=false; // return the flag to false
 					rejectRes = par.substring(par.indexOf(res1), par.indexOf("...")); // cut the message way the student can't sign to the korss.
@@ -144,21 +141,17 @@ public class parsing
 
 					if((res[i].contains(d))==true)
 					{
-						//System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
-
 					res[i] = res[i].replaceAll(d, "");
 					res[i] = res[i].substring(res[i].lastIndexOf(' ') + 1);	
 					System.out.println(res[i]);
 					}
+					
 					if((res[i].contains(d2))==true)
 					{
-						//System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-
 					res[i] = res[i].replaceAll(d2, "");
 					res[i] = res[i].substring(res[i].lastIndexOf(' ') + 1);	
 					System.out.println(res[i]);
 					}
-					
 					
 				}
 				
@@ -184,7 +177,6 @@ public class parsing
 			
 			write.writeParsingFile(korssInfo, wantedKorss, korssCode, studentMessage, res, par, rowPars);
 			rowPars++;
-			//reset();
 		}
 			
 		reset();

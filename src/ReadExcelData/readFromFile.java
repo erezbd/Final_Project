@@ -3,6 +3,9 @@ package ReadExcelData;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.print.attribute.standard.MediaSize.Other;
 import javax.swing.text.AbstractDocument.BranchElement;
@@ -17,27 +20,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class readFromFile 
 {
+	XSSFWorkbook wb ;
+	XSSFSheet sheet1 ;
+
 	public unionCourse [] courseArray;
 	public academicRespo [] academicArr;
-
-//	String parsingPath, academicPath, unionPath, changePath;
-//	
-//	String cellValue = "";
-//	int numOfSheets , numOfCells , numOfRows ;
-	
-//	
-//	public void copy(String parsingPath , String academicPath, String unionPath, String changePath)
-//	{
-//		this.parsingPath = parsingPath;
-//		this.academicPath = academicPath;
-//		this.unionPath = unionPath;
-//		this.changePath = changePath;
-//
-//	}
-	
-	public unionCourse[] getCourseArray() {
-		return courseArray;
-	}
+	public  Object[] temp;
+	public String [] sortHeadOfDep;	
+	public int [] sortCourseCode;
 
 	public void parsingFileRead()
 	{
@@ -53,13 +43,13 @@ public class readFromFile
 		
 		FileInputStream fis = new FileInputStream(scr);
 	
-		XSSFWorkbook wb = new XSSFWorkbook(scr);
+		 wb = new XSSFWorkbook(scr);
 		
 	//	FormulaEvaluator formulaEvaluator = wb.getCreationHelper().createFormulaEvaluator();
 		
-		XSSFSheet sheet1 = wb.getSheetAt(0);
+		 sheet1 = wb.getSheetAt(0);
 			
-		int i =2;
+		 	int i =2;
 			for(Row row : sheet1)
 			{
 			
@@ -77,9 +67,9 @@ public class readFromFile
 
 			write.writeCell(date, time, numOfApp, id);
 			p.pars(message.getStringCellValue() , write );
-		
+
 			i++;
-				if(i==sheet1.getLastRowNum())
+				if(i==sheet1.getLastRowNum()+1)
 					break;
 			}
 			write.writeObj();
@@ -90,13 +80,14 @@ public class readFromFile
 		
 		catch (Exception e)
 		{
-			System.out.println(e.getMessage()+"read class error");
+			System.out.println(e.toString() + "  " + e.getMessage());
 			
 		}
-		
-		
+
 
 	}
+	
+	
 	
 	public void unionKorss()
 	{
@@ -108,8 +99,8 @@ public class readFromFile
 			
 			FileInputStream stream = new FileInputStream(scr);
 		
-			XSSFWorkbook wb = new XSSFWorkbook(scr);
-			XSSFSheet sheet1 = wb.getSheetAt(0);
+			 wb = new XSSFWorkbook(scr);
+			 sheet1 = wb.getSheetAt(0);
 			
 			int start = 1 , end = 0 , newCourseCode ;
 
@@ -117,8 +108,6 @@ public class readFromFile
 			
 			for (int i = 0; i < courseArray.length; i++) {
 				courseArray[i] = new unionCourse();
-//				courseArray[i].setDepartment("bla");
-//				System.out.println(courseArray[i].toString());
 			}
 			System.out.println(sheet1.getLastRowNum());
 			newCourseCode = (int)sheet1.getRow(1).getCell(7).getNumericCellValue();
@@ -164,50 +153,87 @@ public class readFromFile
 	
 	}
 
+	
+	
 	public void academic()
 	{
-		
-		
 		try 
 		{
-			File scr = new File("C:\\Users\\erez\\Desktop\\בשם השם נעשה ונצליח!!\\files\\אחראיים אקדמיים.xlsx");
+			File scr = new File("C:\\Users\\erez\\Desktop\\אחראים אקדמים.xlsx");	
+			wb = new XSSFWorkbook(scr);
+			int sizeOfArray = 0;
 			
-			FileInputStream stream = new FileInputStream(scr);
-			XSSFWorkbook wb = new XSSFWorkbook(scr);
-			XSSFSheet sheet1 = wb.getSheetAt(0);
-			Row row;
-			Cell cell;
-			academicArr = new academicRespo[3000];
-			int cellOfCode = 4;
-			int cellOfAca = 13;
+			for (int i = 0; i < wb.getNumberOfSheets();  i++) {
+				sizeOfArray = sizeOfArray + wb.getSheetAt(i).getLastRowNum();
+			}
+			
+			academicArr = new academicRespo[sizeOfArray];
+			int cellOfCode = 0;
+			int cellOfAca = 1;
 			int count = 0;
 
 
-			for (int i = 1; i < 2;  wb.getSheetAt(i++)) {
-				for (int j = 1; j < wb.getSheetAt(i).getLastRowNum(); wb.getSheetAt(i).getRow(j++)) {
+			for (int i = 0; i < wb.getNumberOfSheets();  i++) {
+				for (int j = 1; j <= wb.getSheetAt(i).getLastRowNum(); j++) {
 					
 					academicArr[count] = new academicRespo();
 					academicArr[count].setCourseCode((int) wb.getSheetAt(i).getRow(j).getCell(cellOfCode).getNumericCellValue());
 					academicArr[count].setHeadOfDep(wb.getSheetAt(i).getRow(j).getCell(cellOfAca).getStringCellValue());
-					System.out.println(academicArr[count].toString());
 					count++;
 					
 				}
 			}
+				
+				Set<Integer> set = new HashSet<Integer>();
+				
+			    for(int i = 0; i<academicArr.length; i++)
+			     {
+			         set.add(academicArr[i].getCourseCode());
+			     }
+		    
+			    temp = new Object[set.size()]; 
+			    temp = set.toArray();
+			    sortCourseCode = new int[set.size()];
+			    for (int i = 0; i < temp.length; i++) {
+			    	sortCourseCode[i] = (int)temp[i];
+				}
+			    Arrays.sort(sortCourseCode);
+			    boolean f = false;
+			    
+			    sortHeadOfDep = new String[sortCourseCode.length];
+			    
+			    for (int i = 0; i < sortCourseCode.length; i++) {
+					for (int j = 0; j < academicArr.length ; j++) {
+						
+						if(sortCourseCode[i]==academicArr[j].getCourseCode())
+						{
+							sortHeadOfDep[i] = academicArr[j].getHeadOfDep();
+							break;
+						}
+						
+					}
+					
+				}
+			    
+			    for (int i = 0; i < sortHeadOfDep.length; i++) {
+			    	
+					System.out.println("row num "+ i + "  "+ sortHeadOfDep[i] + "  " + sortCourseCode[i]);
+
+				}
+			    
+			    wb.close();
 			
-			for (int i = 0; i < academicArr.length; i++) {
-				System.out.println("line num: " + i + "  " + academicArr[i].toString());
-				//System.out.println(academicArr[i].toString());
 			
-		}
-			
-		} catch (Exception e) 
+		} 
+		catch (Exception e) 
 		{
-			
-			System.out.println(e.getMessage());
-			
+			System.out.println(e.toString() + "  " + e.getMessage());
 		}
+
 	}
+	
+	
+	
 	
 }
 
